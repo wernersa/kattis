@@ -33,7 +33,6 @@ def kattis_download(problem_id):
 def kattis_solve(problem_id):
     folder = f'{SOLUTIONS}/{problem_id}/' # TODO: This is repeated, make class?
     names = set([folder + filename.split('.')[-2] for filename in os.listdir(folder)])
-    print(names)
     for filename in sorted(names):
         # Input
         file_in = open(filename + '.in')
@@ -45,7 +44,7 @@ def kattis_solve(problem_id):
         file_out = filename + '.ans'
         with open(file_out, "r") as f: solution = f.read().splitlines()
         
-        print("Solved:", out == solution)
+        #print("Out:\n", out, "\nSolution:\n", solution)
         assert out == solution
 
     return True
