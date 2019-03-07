@@ -1,5 +1,5 @@
-output/
-sample_solutions/
+sample_solutions/*/
+.kattisrc
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
