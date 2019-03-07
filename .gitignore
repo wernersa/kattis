@@ -1,5 +1,6 @@
 sample_solutions/*/
 .kattisrc
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
