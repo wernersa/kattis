@@ -8,3 +8,5 @@ for i in sys.stdin:
     pass
 
 print("output")
+
+print("error", file=sys.stderr)
