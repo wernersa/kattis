@@ -1,3 +1,6 @@
+# Submit client available https://open.kattis.com/help/submit
+# Minor changes to allow for execution on windows clients
+
 #!/usr/bin/env python
 from __future__ import print_function
 import argparse
@@ -65,7 +68,7 @@ def get_config():
     if os.path.exists(_DEFAULT_CONFIG):
         cfg.read(_DEFAULT_CONFIG)
 
-    if not cfg.read([os.path.join(os.getenv('HOME'), '.kattisrc'),
+    if not cfg.read([os.path.join(os.getenv('HOME', default=""), '.kattisrc'),
                      os.path.join(os.path.dirname(sys.argv[0]), '.kattisrc')]):
         raise ConfigError('''\
 I failed to read in a config file from your home directory or from the
