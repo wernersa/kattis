@@ -9,3 +9,15 @@ Run the following command to check problem solution:
 ```bash
 kattis.py <problem_id>
 ```
+
+
+# Current problems
+
+- [x] `modulo`
+- [x] `different`
+- [x] `flexible`
+- [x] `perfectpowers`
+- [x] `simplicity`
+- [x] `phonelist`
+- [ ] `getshorty`
+- [ ] `knapsack`

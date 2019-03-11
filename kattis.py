@@ -6,16 +6,17 @@ import json
 from io import BytesIO
 from zipfile import ZipFile
 from urllib.request import urlopen, Request
+from submit import submit
 
-SOLUTIONS_FOLDER = 'sample_solutions/'
+PROBLEMS_FOLDER = 'problems/'
+SOLUTIONS_FOLDER = 'solutions/'
 
 
 ######################################################
 # TODO: Add link to solution submission.
 #           - Suggest doing this automatically?
 # TODO: Format Output & Input
-
-
+# TODO: Check if script exist in PROBLEMS_FOLDER, else: create from template
 
 # Check if the sample solutions directory exists
 if not os.path.isdir(SOLUTIONS_FOLDER):
@@ -26,7 +27,7 @@ class Kattis_Problem(object):
     def __init__(self, problem_id):
         super(Kattis_Problem, self).__init__()
         self.id = problem_id
-        self.solution_folder = f'{SOLUTIONS_FOLDER}/{self.id}/'
+        self.solution_folder = os.path.join(SOLUTIONS_FOLDER, self.id, '')
     
     
     def download(self):
@@ -51,15 +52,17 @@ class Kattis_Problem(object):
         
         names = set([filename.split('.')[-2] for filename in os.listdir(self.solution_folder)])
         for filename in sorted(names):
-            filepath = self.solution_folder + filename
-
             print(f"\nRunning test case #{filename}:")
 
+            filepath = self.solution_folder + filename
+
+            # Answer from current local script:
             file_in = open(filepath + '.in')
-            out = []
-            with subprocess.Popen(["python", f"{self.id}.py"], stdin=file_in, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
+            file_in_ouput = []
+
+            with subprocess.Popen(["python", os.path.join(PROBLEMS_FOLDER, f"{self.id}.py")], stdin=file_in, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
                 for line in p.stdout:
-                    out.append(line.rstrip('\n'))
+                    file_in_ouput.append(line.rstrip('\n'))
                     print("Out:    ", line, end='')
                 for error in p.stderr:
                     print("Error: ", error, end='')
@@ -67,14 +70,26 @@ class Kattis_Problem(object):
             if p.returncode != 0:
                 raise subprocess.CalledProcessError(p.returncode, p.args)
 
-            # Output
-            file_out = filepath + '.ans'
-            with open(file_out, "r") as f: solution = f.read().splitlines()
+            # Answer to compare against (Sample solutions)
+            file_answer = filepath + '.ans'
+            with open(file_answer, "r") as f: solution = f.read().splitlines()
             
+            for i, line in enumerate(file_in_ouput):
+                print("")
+                print("{:10}#{:>2}: {:<6}".format("Input line", i, file_in_ouput[i])) 
+                print("{:10}#{:>2}: {:<6}".format("Output line", i, solution[i])) 
+                print("-------------")
             print("Solution:", solution)
-            assert out == solution
+            assert file_in_ouput == solution
 
         return True
+
+    def upload(self):
+        with subprocess.Popen(["python", "submit.py", f"{self.id}.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
+            for line in p.stdout:
+                print(line, end='')
+            for error in p.stderr:
+                print(error, end='')
 
 # For testing purposes. Will only run if this file is executed:
 if __name__ == "__main__":
@@ -89,4 +104,7 @@ if __name__ == "__main__":
     
     problem = Kattis_Problem(problem_id)
     problem.download()
-    problem.solve()
+    if problem.solve():
+        print("Problem solved correctly!")
+        #print("Uploading!")
+        #problem.upload()
