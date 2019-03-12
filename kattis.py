@@ -100,6 +100,9 @@ if __name__ == "__main__":
 
     if args['id']:
         problem_id = args['id']
+        print("Opening kattis problem: {}".format(problem_id))
+        print("https://open.kattis.com/problems/{}/\n".format(problem_id))
+
         # Test using "different" if not argument is used
     
     problem = Kattis_Problem(problem_id)

@@ -19,5 +19,6 @@ kattis.py <problem_id>
 - [x] `perfectpowers`
 - [x] `simplicity`
 - [x] `phonelist`
+- [x] `guessthedatastructure`
 - [ ] `getshorty`
 - [ ] `knapsack`
