@@ -14,6 +14,7 @@ kattis.py <problem_id>
 # Current problems
 
 - [x] `aaah`
+- [x] `batteries`
 - [x] `different`
 - [x] `flexible`
 - [x] `guessthedatastructure`
