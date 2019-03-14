@@ -13,15 +13,16 @@ kattis.py <problem_id>
 
 # Current problems
 
-- [x] `modulo`
+- [x] `aaah`
 - [x] `different`
 - [x] `flexible`
-- [x] `perfectpowers`
-- [x] `simplicity`
-- [x] `phonelist`
 - [x] `guessthedatastructure`
+- [x] `modulo`
+- [x] `perfectpowers`
+- [x] `phonelist`
 - [x] `simonsays`
-- [x] `aaah`
+- [x] `simplicity`
 - [x] `taisformula`
+- [x] `timeloop`
 - [ ] `getshorty`
 - [ ] `knapsack`
