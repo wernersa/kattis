@@ -9,9 +9,9 @@ from zipfile import ZipFile
 from urllib.request import urlopen, Request
 from submit import submit
 
-PROBLEMS_FOLDER = 'problems/'
+PROBLEMS_FOLDER = 'problems'
 template_file = os.path.join(PROBLEMS_FOLDER, "_template.py")
-SOLUTIONS_FOLDER = 'solutions/'
+SOLUTIONS_FOLDER = 'solutions'
 
 
 ######################################################
@@ -34,7 +34,7 @@ class Kattis_Problem(object):
         self.script_file = os.path.join(PROBLEMS_FOLDER, f"{self.id}.py")
         
         # To run
-        if self._script_exist:
+        if self._script_exist():
             self.download()
             self.solve()
         else:
@@ -44,7 +44,7 @@ class Kattis_Problem(object):
         return os.path.isfile(self.script_file)
 
     def create(self):
-            copyfile(template_file, self.script_file)
+        copyfile(template_file, self.script_file)
     
     def download(self):
         #Check if problem has been downloaded before:
@@ -66,7 +66,9 @@ class Kattis_Problem(object):
 
     def solve(self):
         
-        names = set([filename.split('.')[-2] for filename in os.listdir(self.solution_folder)])
+        #Get the filename without extension from sample solutions folder
+        names = set([os.path.splitext(os.path.basename(filename))[0] for filename in os.listdir(self.solution_folder)])
+        
         for filename in sorted(names):
             print(f"\nRunning test case #{filename}:")
 
