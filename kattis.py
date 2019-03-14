@@ -99,6 +99,7 @@ class Kattis_Problem(object):
                 print("-------------")
             print("Solution:", solution)
             assert file_in_ouput == solution
+            print("Problem solved correctly!")
 
         return True
 
@@ -123,8 +124,3 @@ if __name__ == "__main__":
     
     # Test using problem_id "different" if not argument is used
     problem = Kattis_Problem(problem_id)
-
-    if problem.solve():
-        print("Problem solved correctly!")
-        #print("Uploading!")
-        #problem.upload()

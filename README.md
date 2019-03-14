@@ -22,5 +22,6 @@ kattis.py <problem_id>
 - [x] `guessthedatastructure`
 - [x] `simonsays`
 - [x] `aaah`
+- [x] `taisformula`
 - [ ] `getshorty`
 - [ ] `knapsack`
