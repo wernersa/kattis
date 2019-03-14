@@ -20,5 +20,6 @@ kattis.py <problem_id>
 - [x] `simplicity`
 - [x] `phonelist`
 - [x] `guessthedatastructure`
+- [x] `simonsays`
 - [ ] `getshorty`
 - [ ] `knapsack`

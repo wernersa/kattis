@@ -3,12 +3,14 @@ import sys
 import argparse
 import subprocess
 import json
+from shutil import copyfile
 from io import BytesIO
 from zipfile import ZipFile
 from urllib.request import urlopen, Request
 from submit import submit
 
 PROBLEMS_FOLDER = 'problems/'
+template_file = os.path.join(PROBLEMS_FOLDER, "_template.py")
 SOLUTIONS_FOLDER = 'solutions/'
 
 
@@ -24,11 +26,25 @@ if not os.path.isdir(SOLUTIONS_FOLDER):
 
 class Kattis_Problem(object):
     """docstring for Kattis_Problem."""
+
     def __init__(self, problem_id):
         super(Kattis_Problem, self).__init__()
         self.id = problem_id
         self.solution_folder = os.path.join(SOLUTIONS_FOLDER, self.id, '')
+        self.script_file = os.path.join(PROBLEMS_FOLDER, f"{self.id}.py")
+        
+        # To run
+        if self._script_exist:
+            self.download()
+            self.solve()
+        else:
+            self.create()
     
+    def _script_exist(self):
+        return os.path.isfile(self.script_file)
+
+    def create(self):
+            copyfile(template_file, self.script_file)
     
     def download(self):
         #Check if problem has been downloaded before:
@@ -60,7 +76,7 @@ class Kattis_Problem(object):
             file_in = open(filepath + '.in')
             file_in_ouput = []
 
-            with subprocess.Popen(["python", os.path.join(PROBLEMS_FOLDER, f"{self.id}.py")], stdin=file_in, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
+            with subprocess.Popen(["python", self.script_file], stdin=file_in, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
                 for line in p.stdout:
                     file_in_ouput.append(line.rstrip('\n'))
                     print("Out:    ", line, end='')
@@ -85,7 +101,7 @@ class Kattis_Problem(object):
         return True
 
     def upload(self):
-        with subprocess.Popen(["python", "submit.py", f"{self.id}.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
+        with subprocess.Popen(["python", "submit.py", self.script_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
             for line in p.stdout:
                 print(line, end='')
             for error in p.stderr:
@@ -102,11 +118,10 @@ if __name__ == "__main__":
         problem_id = args['id']
         print("Opening kattis problem: {}".format(problem_id))
         print("https://open.kattis.com/problems/{}/\n".format(problem_id))
-
-        # Test using "different" if not argument is used
     
+    # Test using problem_id "different" if not argument is used
     problem = Kattis_Problem(problem_id)
-    problem.download()
+
     if problem.solve():
         print("Problem solved correctly!")
         #print("Uploading!")
