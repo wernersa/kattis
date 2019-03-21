@@ -45,6 +45,7 @@ class Kattis_Problem(object):
 
     def create(self):
         copyfile(template_file, self.script_file)
+        print(f"Created {self.script_file}")
     
     def download(self):
         #Check if problem has been downloaded before:
