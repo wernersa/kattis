@@ -16,6 +16,7 @@ kattis.py <problem_id>
 - [x] `aaah`
 - [x] `batteries`
 - [x] `different`
+- [x] `countingstars`
 - [x] `flexible`
 - [x] `guessthedatastructure`
 - [x] `modulo`
