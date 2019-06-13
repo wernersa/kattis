@@ -71,20 +71,28 @@ class Kattis_Problem(object):
         names = set([os.path.splitext(os.path.basename(filename))[0] for filename in os.listdir(self.solution_folder)])
         
         for filename in sorted(names):
-            print(f"\nRunning test case #{filename}:")
 
             filepath = self.solution_folder + filename
 
             # Answer from current local script:
             file_in = open(filepath + '.in')
-            file_in_ouput = []
+            script_result = []
 
             with subprocess.Popen(["python", self.script_file], stdin=file_in, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
-                for line in p.stdout:
-                    file_in_ouput.append(line.rstrip('\n'))
-                    print("Out:    ", line, end='')
                 for error in p.stderr:
                     print("Error: ", error, end='')
+                for line in p.stdout:
+                    script_result.append(line.rstrip('\n'))
+                if len(script_result) == 0:
+                    print("No actual output from current script!")
+                    return
+                else:
+                    #Print the output
+                    print(f"\nRunning test case #{filename}:")
+                    for out in script_result:
+                        print("Out:    ", out)
+            
+
 
             if p.returncode != 0:
                 raise subprocess.CalledProcessError(p.returncode, p.args)
@@ -93,13 +101,13 @@ class Kattis_Problem(object):
             file_answer = filepath + '.ans'
             with open(file_answer, "r") as f: solution = f.read().splitlines()
             
-            for i, line in enumerate(file_in_ouput):
+            for i, line in enumerate(script_result):
                 print("")
-                print("{:10}#{:>2}: {:<6}".format("Input line", i, file_in_ouput[i])) 
+                print("{:10}#{:>2}: {:<6}".format("Input line", i, script_result[i])) 
                 print("{:10}#{:>2}: {:<6}".format("Output line", i, solution[i])) 
                 print("-------------")
             print("Solution:", solution)
-            assert file_in_ouput == solution
+            assert script_result == solution
             print("Problem solved correctly!")
 
         return True

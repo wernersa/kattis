@@ -26,5 +26,10 @@ kattis.py <problem_id>
 - [x] `simplicity`
 - [x] `taisformula`
 - [x] `timeloop`
+- [x] `bottledup`
+- [ ] `ballotboxes`
 - [ ] `getshorty`
-- [ ] `knapsack`
+- [ ] `calculatingdartscores`
+- [ ] `chess`
+- [ ] `closestsums`
+- [ ] `mravi`
