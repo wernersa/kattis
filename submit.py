@@ -176,10 +176,10 @@ def open_submission(submit_response, cfg):
     m = re.search(r'Submission ID: (\d+)', submit_response)
     if m:
         submission_id = m.group(1)
-        print('Open in browser (y/N)?')
-        if sys.stdin.readline().upper()[:-1] == 'Y':
-            url = '%s/%s' % (submissions_url, submission_id)
-            webbrowser.open(url)
+        # print('Open in browser (y/N)?')
+        # if sys.stdin.readline().upper()[:-1] == 'Y':
+        url = '%s/%s' % (submissions_url, submission_id)
+        webbrowser.open(url)
 
 
 def main():

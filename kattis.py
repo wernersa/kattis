@@ -8,6 +8,7 @@ from io import BytesIO
 from zipfile import ZipFile
 from urllib.request import urlopen, Request
 from submit import submit
+from helpers import *
 
 PROBLEMS_FOLDER = 'problems'
 template_file = os.path.join(PROBLEMS_FOLDER, "_template.py")
@@ -113,23 +114,29 @@ class Kattis_Problem(object):
         return True
 
     def upload(self):
-        with subprocess.Popen(["python", "submit.py", self.script_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
-            for line in p.stdout:
+        with subprocess.Popen(["python", "submit.py", self.script_file, "--force"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=4096, universal_newlines=True, start_new_session=True) as p:
+            for line in p.stdout.read():
                 print(line, end='')
-            for error in p.stderr:
+            for error in p.stderr.read():
                 print(error, end='')
 
 # For testing purposes. Will only run if this file is executed:
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Utility functions for solving problems on kattis')
-    parser.add_argument('id',help='The problem id found on kattis', nargs='?', default="different")
+    parser.add_argument('id', help='The problem id found on kattis', nargs='?', const=True, default="")
+    parser.add_argument("-u", "--upload", help="Upload to kattis.com if problem solved successfully.", type=str2bool, nargs='?', const=True, default=False)
     args = vars(parser.parse_args())
 
-    if args['id']:
+    if not args['id']:
+        print("Problem id not given as first argument.")
+        print("https://open.kattis.com/problems/")
+        print("\nusage: kattis.py [problem id]")
+    elif args['id']:
         problem_id = args['id']
         print("Opening kattis problem: {}".format(problem_id))
         print("https://open.kattis.com/problems/{}/\n".format(problem_id))
-    
-    # Test using problem_id "different" if not argument is used
-    problem = Kattis_Problem(problem_id)
+        problem = Kattis_Problem(problem_id)
+
+        if args['upload']:
+            problem.upload()
